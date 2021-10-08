@@ -1,0 +1,462 @@
+#include<bits/stdc++.h>
+//#include <ext/pb_ds/assoc_container.hpp>
+using namespace std;
+// using namespace std;
+#define ff              first
+#define ss              second
+#define ll             long long
+#define pb              push_back
+#define mp              make_pair
+#define pii             pair<int,int>
+#define vi              vector<int>
+#define mii             map<int,int>
+#define pqb             priority_queue<int>
+#define pqs             priority_queue<int,vi,greater<int>>
+#define setbits(x)      __builtin_popcountll(x)
+#define zrobits(x)      __builtin_ctzll(x)
+#define mod             1000000007
+#define inf             1e18
+#define ps(x,y)         fixed<<setprecision(y)<<x
+#define mk(arr,n,type)  type *arr=new type[n];
+#define w(x)            int x; cin>>x; while(x--)
+mt19937                 rng(chrono::steady_clock::now().time_since_epoch().count());
+#define rep(i,a,b)          for(ll i = a; i < b; ++i)
+#define f(i,s,e) for(long long int i=s;i<e;i++)
+#define cf(i,s,e) for(long long int i=s;i<=e;i++)
+#define rf(i,e,s) for(long long int i=e-1;i>=s;i--)
+ll lstbt(ll val) { ll msk = val & (val - 1); return log2(val ^ msk);}
+void c_p_c()
+{
+#ifndef ONLINE_JUDGE
+	freopen("input1.txt", "r", stdin);
+	freopen("output2.txt", "w", stdout);
+#endif
+}
+template<typename T>
+class Graph
+{
+public:
+	T v;
+	list<T>*l;
+	Graph(T v)
+	{
+		this->v = v;
+		l = new list<T>[v];
+	}
+	void addedge(T x, T y, bool bidir)
+	{
+		l[x].pb(y);
+		if (bidir)
+			l[y].pb(x);
+
+
+	}
+	void printgraph()
+	{
+		rep(i, 0, v)
+		{
+			cout << "vertex " << i << " -> ";
+			for (auto nbr : l[i])
+			{
+				cout << nbr << " ";
+			}
+			cout << endl;
+		}
+
+	}
+	bool istree()
+	{
+		bool *visited = new bool[v];
+		T *parent = new T[v];
+
+		rep(i, 0, v)
+		{
+			visited[i] = false;
+			parent[i] = i;
+		}
+		queue<T>q;
+		T src = 0;
+		q.push(src);
+		visited[src] = true;
+		while (!q.empty())
+		{
+			T node = q.front();
+			q.pop();
+			for (auto nbr : l[node])
+			{
+				if (visited[nbr] == true && parent[node] != nbr)
+				{
+					return false;
+
+				}
+				else if (!visited[nbr])
+				{
+					q.push(nbr);
+					visited[nbr] = true;
+					parent[nbr] = node;
+				}
+			}
+
+		}
+		return true;
+
+
+	}
+	bool cycle_helper(T node, bool *visited, bool *stack)
+	{
+		visited[node] = true;
+		stack[node] = true;
+		for (auto nbr : l[node])
+		{
+			if (stack[nbr] == true)
+			{
+				return true;
+			}
+			else if (visited[nbr] == false)
+			{
+				bool cycle_mila = cycle_helper(nbr, visited, stack);
+				if (cycle_mila)
+				{
+					return true;
+				}
+			}
+		}
+
+
+		stack[node] = false;
+		return false;
+	}
+	bool containscycle()
+	{
+		bool *visited = new bool[v];
+		bool *stack = new bool[v];
+		rep(i, 0, v)
+		{
+			visited[i] = false;
+			stack[i] = false;
+		}
+
+	}
+
+
+};
+
+// class Graph
+// {
+// 	unordered_map<string, list<pair<string, ll>>>l;
+// public:
+// 	void addedge(string x, string y, ll w, bool bidir)
+// 	{
+// 		l[x].pb({y, w});
+// 		if (bidir)
+// 		{
+// 			l[y].pb({x, w});
+// 		}
+
+// 	}
+// 	void printgraph()
+// 	{
+// 		for (auto p : l)
+// 		{
+// 			string city = p.first;
+// 			cout << "city " << city << " -> ";
+// 			list<pair<string, ll>> nbr = p.second;
+// 			for (auto q : nbr)
+// 			{
+// 				string dest = q.first;
+// 				ll dist = q.second;
+// 				cout << dest << " " << dist << ", ";
+
+// 			}
+
+// 			cout << endl;
+
+// 		}
+
+// 	}
+
+// };
+// template<typename T>
+// class  Graph
+// {
+// public:
+// 	map<T, list<T>>l;
+// 	void addedge(T x, T y)
+// 	{
+// 		l[x].pb(y);
+// 		l[y].pb(x);
+// 	}
+// 	//BFS SSSP
+// 	void bfs(T src)
+// 	{
+// 		std::map<T, ll> dis;
+// 		queue<T>q;
+
+// 		for (auto pairs : l)
+// 		{
+// 			T node = pairs.first;
+// 			dis[node] = INT_MAX;
+// 		}
+// 		q.push(src);
+// 		dis[src] = 0;
+
+// 		while (!q.empty())
+// 		{
+// 			T node = q.front();
+// 			// cout << node << " -> ";
+// 			q.pop();
+// 			for (auto x : l[node])
+// 			{
+
+// 				if (dis[x] == INT_MAX)
+// 				{
+
+// 					q.push(x);
+// 					dis[x] = dis[node] + 1;
+
+// 				}
+// 			}
+
+// 		}
+// 		for (auto node : l)
+// 		{
+// 			T no = node.first;
+// 			ll d = dis[no];
+// 			cout << "node " << no << " dis from src " << d << endl;
+// 		}
+// 	}
+
+
+// };
+// SNAKES AND LADDERS
+// template<typename T>
+// class  Graph
+// {
+// public:
+// 	map<T, list<T>>l;
+// 	void addedge(T x, T y)
+// 	{
+// 		l[x].pb(y);
+// 		// l[y].pb(x);
+// 	}
+// 	//BFS SSSP
+// 	ll bfs(T src, T dest)
+// 	{
+// 		std::map<T, ll> dis;
+// 		queue<T>q;
+
+// 		for (auto pairs : l)
+// 		{
+// 			T node = pairs.first;
+// 			dis[node] = INT_MAX;
+// 		}
+// 		q.push(src);
+// 		dis[src] = 0;
+
+// 		while (!q.empty())
+// 		{
+// 			T node = q.front();
+// 			// cout << node << " -> ";
+// 			q.pop();
+// 			for (auto x : l[node])
+// 			{
+
+// 				if (dis[x] == INT_MAX)
+// 				{
+
+// 					q.push(x);
+// 					dis[x] = dis[node] + 1;
+
+// 				}
+// 			}
+
+// 		}
+// 		// for (auto node : l)
+// 		// {
+// 		// 	T no = node.first;
+// 		// 	ll d = dis[no];
+// 		// 	cout << "node " << no << " dis from src " << d << endl;
+// 		// }
+// 		return dis[dest];
+// 	}
+// 	void dfs(T src)
+// 	{
+// 		map<T, bool>vis;
+// 		for (auto p : l)
+// 		{
+// 			T node = p.first;
+// 			vis[node] = false;
+// 		}
+// 		dfs_helper(src, vis);
+// 	}
+// 	void dfs_helper(T src, std::map<T, bool>&vis)
+// 	{
+// 		cout << src << " -> ";
+// 		vis[src] = true;
+// 		for (auto nbr : l[src])
+// 		{
+// 			if (!vis[nbr])
+// 			{
+// 				dfs_helper(nbr, vis);
+// 			}
+// 		}
+// 	}
+// 	void countconnectedcomponents()
+// 	{
+// 		map<T, bool>vis;
+// 		for (auto p : l)
+// 		{
+// 			T node = p.first;
+// 			vis[node] = false;
+// 		}
+// 		ll cnt = 0;
+// 		for (auto p : l)
+// 		{
+// 			T node = p.first;
+// 			if (!vis[node])
+// 			{
+// 				cout << "Component " << cnt << "== ";
+// 				dfs_helper(node, vis);
+// 				cnt++;
+// 			}
+// 		}
+// 		// cout << endl;
+// 		cout << cnt << endl;
+// 	}
+// 	void dfs_topo(T src, map<T, bool>& vis, list<T>&ordering)
+// 	{
+// 		vis[src] = true;
+// 		for (auto nbr : l[src])
+// 		{
+// 			if (!vis[nbr])
+// 			{
+// 				dfs_topo(nbr, vis, ordering);
+// 			}
+// 		}
+// 		ordering.push_front(src);
+// 		return;
+// 	}
+// 	void topo()
+// 	{
+// 		map<T, bool>vis;
+// 		list<T>ordering;
+// 		for (auto p : l)
+// 		{
+// 			vis[p.first] = false;
+// 		}
+// 		for (auto p : l)
+// 		{
+// 			T node = p.first;
+// 			if (!vis[node])
+// 			{
+// 				dfs_topo(node, vis, ordering);
+// 			}
+// 		}
+// 		for (auto x : ordering)
+// 		{
+// 			cout << x << " ";
+// 		}
+
+// 	}
+// 	void bfstopo()
+// 	{
+// 		ll indegree[l.size() + 1];
+// 		for (auto p : l)
+// 		{
+// 			indegree[p.first] = 0;
+// 		}
+// 		for (auto p : l)
+// 		{
+// 			T node = p.first;
+// 			for (auto x : l[node])
+// 			{
+// 				indegree[x]++;
+// 			}
+// 		}
+// 		queue<T>q;
+// 		for (auto p : l)
+// 		{
+// 			T node = p.first;
+// 			if (indegree[node] == 0)
+// 			{
+// 				q.push(node);
+// 			}
+// 		}
+// 		while (!q.empty())
+// 		{
+// 			T node = q.front();
+// 			cout << node << " ->";
+// 			q.pop();
+
+
+// 			for (auto x : l[node])
+// 			{
+// 				indegree[x]--;
+// 				if (indegree[x] == 0)
+// 				{
+// 					q.push(x);
+// 				}
+// 			}
+// 		}
+
+// 	}
+// };
+int32_t main()
+{
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+	c_p_c();
+	Graph<ll> g(6);
+	// ll board[50] = {0};
+	// board[2] = 13;
+	// board[5] = 2;
+	// board[9] = 18;
+	// board[17] = -13;
+	// board[24] = -8;
+	// board[25] = 10;
+	// board[32] = -2;
+	// board[34] = -22;
+	// for (ll i = 0; i <= 36; i++)
+	// {
+	// 	for (ll j = 1; j <= 6; j++)
+	// 	{
+	// 		ll k = i + j;
+	// 		k = k + board[k];
+	// 		if (k <= 36)
+	// 		{
+	// 			g.addedge(i, k);
+	// 		}
+	// 	}
+	// }
+	// g.addedge(36, 36);
+	// g.addedge(0, 1);
+	// g.addedge(1, 2);
+	// g.addedge(2, 3);
+	// g.addedge(3, 5);
+
+	// g.countconnectedcomponents();
+	// g.topo();
+	// g.bfstopo();
+	// if (g.istree())
+	// {
+	// 	cout << "TRee" << endl;
+	// }
+	// else {
+	// 	cout << "Not a tree" << endl;
+	// }
+	g.addedge(1, 2, false);
+	g.addedge(2, 3, false);
+	g.addedge(3, 4, false);
+	g.addedge(4, 5, false);
+	g.addedge(5, 6, false);
+	g.addedge(4, 2, false);
+	if (g.containscycle())
+	{
+		cout << "containscycle" << endl;
+	}
+	else {
+		cout << "Not contain cycle" << endl;
+	}
+
+
+
+}
