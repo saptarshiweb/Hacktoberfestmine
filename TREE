@@ -1,0 +1,518 @@
+#include<bits/stdc++.h>
+//#include <ext/pb_ds/assoc_container.hpp>
+using namespace std;
+// using namespace std;
+#define ff              first
+#define ss              second
+#define ll             long long
+#define pb              push_back
+#define mp              make_pair
+#define pii             pair<int,int>
+#define vi              vector<int>
+#define mii             map<int,int>
+#define pqb             priority_queue<int>
+#define pqs             priority_queue<int,vi,greater<int> >
+#define setbits(x)      __builtin_popcountll(x)
+#define zrobits(x)      __builtin_ctzll(x)
+#define mod             1000000007
+#define inf             1e18
+#define ps(x,y)         fixed<<setprecision(y)<<x
+#define mk(arr,n,type)  type *arr=new type[n];
+#define w(x)            int x; cin>>x; while(x--)
+mt19937                 rng(chrono::steady_clock::now().time_since_epoch().count());
+#define rep(i,a,b)          for(ll i = a; i < b; ++i)
+#define f(i,s,e) for(long long int i=s;i<e;i++)
+#define cf(i,s,e) for(long long int i=s;i<=e;i++)
+#define rf(i,e,s) for(long long int i=e-1;i>=s;i--)
+ll lstbt(ll val) { ll msk = val & (val - 1); return log2(val ^ msk);}
+void c_p_c()
+{
+#ifndef ONLINE_JUDGE
+	freopen("input1.txt", "r", stdin);
+	freopen("output2.txt", "w", stdout);
+#endif
+}
+template<typename T>
+class binarytree {
+public:
+	T data;
+	binarytree *left;
+	binarytree *right;
+	binarytree(T d)
+	{
+		data = d;
+		left = NULL;
+		right = NULL;
+	}
+};
+void print(binarytree<ll>*root)
+{
+	if (root == NULL)
+	{
+		return;
+	}
+	cout << root->data << ": ";
+	if (root->left != NULL)
+	{
+		cout << root->left->data << " ,";
+	}
+	if (root->right != NULL)
+	{
+		cout << root->right->data << " ,";
+	}
+	cout << endl;
+	print(root->left);
+	print(root->right);
+}
+binarytree<ll>* takeinput()
+{
+	ll d;
+	cin >> d;
+	if (d == -1)
+	{
+		return NULL;
+	}
+	binarytree<ll>*root = new binarytree<ll>(d);
+	root->left = takeinput();
+	root->right = takeinput();
+
+}
+binarytree<ll>* takeinputlevelwise()
+{
+	ll da;
+	cin >> da;
+	if (da == -1)
+	{
+		return NULL;
+	}
+	binarytree<ll>*root = new binarytree<ll>(da);
+	queue<binarytree<ll>*>q;
+	q.push(root);
+	while (!q.empty())
+	{
+		binarytree<ll>*f = q.front();
+		q.pop();
+		ll lc, rc;
+		cin >> lc;
+		if (lc != -1)
+		{
+			binarytree<ll>*lchild = new binarytree<ll>(lc);
+			f->left = lchild;
+			q.push(lchild);
+		}
+		cin >> rc;
+		if (rc != -1)
+		{
+			binarytree<ll>*rchild = new binarytree<ll>(rc);
+			f->right = rchild;
+			q.push(rchild);
+		}
+
+
+
+	}
+	return root;
+}
+void printlevelwise(binarytree<ll>*root)
+{
+	if (root == NULL)
+	{
+		return;
+	}
+	queue<binarytree<ll>*>q;
+	q.push(root);
+	while (!q.empty())
+	{
+		binarytree<ll>*f = q.front();
+		q.pop();
+		cout << f->data << ":";
+		if (f->left != NULL)
+		{
+			cout << "L" << f->left->data << ", ";
+			q.push(f->left);
+		}
+		else {
+			cout << "L" << "-1" << ", ";
+		}
+		if (f->right != NULL)
+		{
+			cout << "R" << f->right->data << ", ";
+			q.push(f->right);
+		}
+		else {
+			cout << "R" << "-1" << ", ";
+
+		}
+		cout << endl;
+
+	}
+}
+ll countnodes(binarytree<ll>*root)
+{
+	if (root == NULL)
+	{
+		return 0;
+	}
+	return countnodes(root->left) + countnodes(root->right) + 1;
+}
+bool nodeexists(binarytree<ll>*root, ll x)
+{
+	if (root == NULL)
+	{
+		return false;
+	}
+	if (root->data == x)
+	{
+		return true;
+	}
+	bool fdl = nodeexists(root->left, x);
+	bool fdr = nodeexists(root->right, x);
+	if (fdl == true || fdr == true)
+	{
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+ll height(binarytree<ll>*root)
+{
+	if (root == NULL)
+	{
+		return 0;
+	}
+	ll lc = height(root->left);
+	ll rc = height(root->right);
+	return max(lc, rc) + 1;
+}
+void mirror(binarytree<ll>*root)
+{
+	if (root == NULL)
+	{
+		return;
+	}
+	mirror(root->left);
+	mirror(root->right);
+	swap(root->left, root->right);
+}
+void preorder(binarytree<ll>*root)
+{
+	if (root == NULL)
+	{
+		return;
+	}
+	cout << root->data << " ";
+	preorder(root->left);
+	preorder(root->right);
+}
+void inorder(binarytree<ll>*root)
+{
+	if (root == NULL)
+	{
+		return;
+	}
+	preorder(root->left);
+	cout << root->data << " ";
+
+	preorder(root->right);
+}
+void postorder(binarytree<ll>*root)
+{
+	if (root == NULL)
+	{
+		return;
+	}
+	preorder(root->left);
+	preorder(root->right);
+	cout << root->data << " ";
+
+}
+binarytree<ll> * buildtreefrompreandin(ll ino[], ll pre[], ll s, ll e)
+{
+	static int x = 0;
+	if (s > e)
+	{
+		return NULL;
+	}
+	binarytree<ll> *root = new binarytree<ll>(pre[x]);
+	int index = -1;
+	for (int j = s; j <= e; j++)
+	{
+		if (pre[x] == ino[j])
+		{
+			index = j;
+			break;
+		}
+
+	}
+	x++;
+	root->left = buildtreefrompreandin(ino, pre, s, index - 1);
+	root->right = buildtreefrompreandin(ino, pre, index + 1, e);
+	return root;
+}
+pair<ll, ll> diameter(binarytree<ll>*root)
+{
+	if (root == NULL)
+	{
+		pair<ll, ll>p;
+		p.first = 0;
+		p.second = 0;
+		return p;
+	}
+	pair<ll, ll>leftans = diameter(root->left);
+	pair<ll, ll>rightans = diameter(root->right);
+	ll lh = leftans.first;
+	ll ld = leftans.second;
+	ll rh = rightans.first;
+	ll rd = rightans.second;
+	ll height = 1 + max(lh, rh);
+	ll diameter = max(ld, max(rd, lh + rh));
+	pair<ll, ll>p;
+	p.first = height;
+	p.second = diameter;
+	return p;
+}
+pair<ll, ll> minandmax(binarytree<ll>*root)
+{
+	if (root == NULL)
+	{
+		pair<ll, ll>p;
+		p.first = INT_MAX;
+		p.second = INT_MIN;
+		return p;
+	}
+	pair<ll, ll>lc = minandmax(root->left);
+	pair<ll, ll>rc = minandmax(root->right);
+	ll lmin = lc.first;
+	ll lmax = lc.second;
+	ll rmin = rc.first;
+	ll rmax = rc.second;
+	if (lmin == INT_MIN)
+	{
+		lmin = root->data;
+		lmax = root->data;
+	}
+	if (rmin == INT_MIN)
+	{
+		rmin = root->data;
+		rmax = root->data;
+	}
+	ll mi = min(lmin, min(rmin, min(rmax, min(lmax, root->data))));
+	ll ma = max(lmin, max(rmin, max(rmax, max(lmax, root->data))));
+	pair<ll, ll>p;
+	p.first = mi;
+	p.second = ma;
+	return p;
+
+}
+ll sum(binarytree<ll>*root)
+{
+	if (root == NULL)
+	{
+		return 0;
+	}
+	ll lc = sum(root->left);
+	ll rc = sum(root->right);
+	return root->data + lc + rc;
+}
+bool isbalanced(binarytree<ll>*root)
+{
+	if (root == NULL)
+	{
+		return true;
+	}
+	ll lh = height(root->left);
+	ll rh = height(root->right);
+	if (abs(lh - rh) >= 2)
+	{
+		return false;
+	}
+	bool lc = isbalanced(root->left);
+	bool rc = isbalanced(root->right);
+	if (lc == false || rc == false)
+	{
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+pair<bool, ll> isbalanced1(binarytree<ll>*root)
+{
+	if (root == NULL)
+	{
+		pair<bool, ll>p;
+		p.first = true;
+		p.second = 0;
+		return p;
+	}
+	pair<bool, ll> lc = isbalanced1(root->left);
+	pair<bool, ll>rc = isbalanced1(root->right);
+	ll ltrue = lc.first;
+	ll lh = lc.second;
+	ll rtrue = rc.first;
+	ll rh = rc.second;
+	if (ltrue == false || rtrue == false)
+	{
+		pair<bool, ll>p;
+		p.first = false;
+		p.second = 1 + max(lh, rh);
+		return p;
+	}
+	else {
+		if (abs(lh - rh) > 1)
+		{
+			pair<bool, ll>p;
+			p.first = false;
+			p.second = 1 + max(lh, rh);
+			return p;
+		}
+		else {
+			pair<bool, ll>p;
+			p.first = true;
+			p.second = 1 + max(lh, rh);
+			return p;
+
+
+		}
+	}
+
+
+
+}
+binarytree<ll>* removeleafnodes(binarytree<ll>*root)
+{
+	if (root == NULL)
+	{
+		return NULL;
+	}
+	if (root->left == NULL && root->right == NULL)
+	{
+		delete root;
+		return NULL;
+	}
+	root->left = removeleafnodes(root->left);
+	root->right = removeleafnodes(root->right);
+	return root;
+}
+void zizagtraversal(binarytree<ll>* root)
+{
+	// if null then return
+	if (!root)
+		return;
+
+	// declare two stacks
+	stack<binarytree<ll>*> currentlevel;
+	stack<binarytree<ll>*> nextlevel;
+
+	// push the root
+	currentlevel.push(root);
+
+	// check if stack is empty
+	bool lefttoright = true;
+	while (!currentlevel.empty()) {
+
+		// pop out of stack
+		binarytree<ll>* temp = currentlevel.top();
+		currentlevel.pop();
+
+		// if not null
+		if (temp) {
+
+			// print the data in it
+			cout << temp->data << " ";
+
+			// store data according to current
+			// order.
+			if (lefttoright) {
+				if (temp->left)
+					nextlevel.push(temp->left);
+				if (temp->right)
+					nextlevel.push(temp->right);
+			}
+			else {
+				if (temp->right)
+					nextlevel.push(temp->right);
+				if (temp->left)
+					nextlevel.push(temp->left);
+			}
+		}
+
+		if (currentlevel.empty()) {
+			lefttoright = !lefttoright;
+			swap(currentlevel, nextlevel);
+			cout << endl;
+		}
+	}
+}
+int32_t main()
+{
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+	c_p_c();
+	// binarytree<ll>*root = new binarytree<ll>(5);
+	// binarytree<ll>*node1 = new binarytree<ll>(4);
+	// binarytree<ll>*node2 = new binarytree<ll>(3);
+	// root->left = node1;
+	// root->right = node2;
+	binarytree<ll>*root = takeinputlevelwise();
+	// printlevelwise(root);
+	// cout << countnodes(root) << endl;
+	// if (nodeexists(root, 7))
+	// {
+	// 	cout << "true" << endl;
+	// }
+	// else {
+	// 	cout << "false" << endl;
+	// }
+	// cout << height(root) << endl;
+	// mirror(root);
+	// // printlevelwise(root);
+	// preorder(root);
+	// cout << endl;
+	// inorder(root);
+	// cout << endl;
+	// postorder(root);
+	// ll pre[10000], in[10000];
+	// ll n;
+	// cin >> n;
+	// rep(i, 0, n)
+	// {
+	// 	cin >> pre[i];
+	// }
+	// rep(i, 0, n)
+	// {
+	// 	cin >> in[i];
+	// }
+	// binarytree<ll>*root = buildtreefrompreandin(in, pre, 0, n - 1);
+	// print(root);
+	// pair<ll, ll>p4 = diameter(root);
+	// pair<ll, ll>p4 = minandmax(root);
+	// cout << p4.first << " " << p4.second << endl;
+	// cout << sum(root) << endl;
+	// pair<bool, ll>p = isbalanced1(root);
+	// if (p.first)
+	// {
+	// 	cout << "true" << endl;
+	// }
+	// else {
+	// 	cout << "false" << endl;
+	// }
+	// root = removeleafnodes(root);
+	// printlevelwise(root);
+	zizagtraversal(root);
+	// print(root);
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
