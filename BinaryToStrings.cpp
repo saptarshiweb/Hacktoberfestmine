@@ -8,7 +8,7 @@ int main()
 	string a,b="",tmp="";
 	getline(cin,a);
 	int i,t;
-	for(i=0;i<=a.size();i++)
+	for(i=1;i<=a.size();i++)
 	{
 		if(i!=a.size()&&a[i]!=' ')
 		{
@@ -20,7 +20,7 @@ int main()
 			tmp="";
 		}
 	}
-	cout<<"\n"<<b<<endl;
+	cout<<"\n"<<a<<endl;
 	return 0;
 }
 int bintodec(int temp)
@@ -30,7 +30,7 @@ int bintodec(int temp)
 	{
 		int rem = temp%10;
 		dec+= (int)pow((int)2,(int)i)*rem;
-		i++;
+	        ++i;
 		temp/=10;
 	}
 	return dec;
