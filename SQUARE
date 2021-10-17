@@ -1,0 +1,6 @@
+def square(num):
+    return num * num
+
+
+x=int(input())
+print(square(x))
