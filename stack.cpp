@@ -1,37 +1,19 @@
-#include <iostream>
-
+#include<iostream>
+#include<string.h>
+#include<stack>
 using namespace std;
-
-// A sample function f1() that throws an int exception
-void f1() throw (int) {
-cout<<"\n f1() Start ";
-throw 100;
-cout<<"\n f1() End ";
-}
-
-// Another sample function f2() that calls f1()
-void f2() throw (int) {
-cout<<"\n f2() Start ";
-f1();
-cout<<"\n f2() End ";
-}
-
-// Another sample function f3() that calls f2() and handles exception thrown by f1()
-void f3() {
-cout<<"\n f3() Start ";
-try {
-	f2();
-}
-catch(int i) {
-cout<<"\n Caught Exception: "<<i;
-}
-cout<<"\n f3() End";
-}
-
-// A driver function to demonstrate Stack Unwinding process
-int main() {
-f3();
-
-getchar();
-return 0;
+int main()
+{
+    char a[20]="donald";
+    stack<char>p;
+    int i;
+    for(i=0;i<strlen(a);i++)
+        p.push(a[i]);
+    cout<<"revesed string ";
+    while(!p.empty())
+    {
+        cout<<p.top();
+        p.pop();
+    }
+    return 0;
 }
